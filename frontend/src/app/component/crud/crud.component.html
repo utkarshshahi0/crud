@@ -1,0 +1,66 @@
+<!-- <p>crud works!</p> -->
+<div class="p-grid p-dir-col">
+  <div class="p-col">
+    <p-button label="New Product" icon="pi pi-plus" (onClick)="openNew()"></p-button>
+  </div>
+
+  <!-- Display list of items -->
+
+  <div class="p-col">
+    <p-table [value]="products">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{product.name}}</td>
+          <td>{{product.price}}</td>
+          <td>{{product.category}}</td>
+          <td>
+            <p-button icon="pi pi-pencil" (onClick)="editProduct(product)"></p-button>
+            <p-button icon="pi pi-trash" (onClick)="deleteProduct(product)"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <!-- ngx chart  -->
+  <div class="p-col">
+    <ngx-charts-bar-vertical [results]="chartData" [view]="[700, 400]" [scheme]="colorScheme" [gradient]="true"
+      [xAxis]="true" [yAxis]="true" [legend]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
+      [xAxisLabel]="'Product'" [yAxisLabel]="'Price'">
+    </ngx-charts-bar-vertical>
+  </div>
+</div>
+
+
+<p-dialog header="Product Details" [(visible)]="productDialog" [modal]="true" [closable]="false">
+  <form #productForm="ngForm" (ngSubmit)="saveProduct(productForm)">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <input id="name" type="text" pInputText [(ngModel)]="product.name" name="name" required />
+        <div *ngIf="submitted && !product.name" class="p-error">Name is required.</div>
+      </div>
+      <div class="p-field">
+        <label for="price">Price</label>
+        <input id="price" type="number" pInputText [(ngModel)]="product.price" name="price" required min="0" />
+        <div *ngIf="submitted && !product.price" class="p-error">Price is required and must be greater than zero.</div>
+      </div>
+      <div class="p-field">
+        <label for="category">Category</label>
+        <input id="category" type="text" pInputText [(ngModel)]="product.category" name="category" required />
+        <div *ngIf="submitted && !product.category" class="p-error">Category is required.</div>
+      </div>
+    </div>
+    <p-footer>
+      <p-button label="Cancel" icon="pi pi-times" (onClick)="hideDialog()"></p-button>
+      <p-button label="Save" icon="pi pi-check" type="submit"></p-button>
+    </p-footer>
+  </form>
+</p-dialog>
